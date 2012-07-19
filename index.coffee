@@ -1,76 +1,7 @@
-_ = require 'underscore'
-$ = require 'jquery'
-Browser = require 'zombie'
-events = require 'events'
+DS = require('./AU').DataStructure
+Browzy = require('./AU').Browzy
 
-class LinkedList
-
-	_length : 0
-
-	_head : null
-
-	# add the node in a linked list
-	add : (data) ->
-		node =
-			data:
-				url : data["url"]
-				name : data["name"]
-				attr : data["attr"]
-			next : null
-
-		# if we have no head
-		unless @_head
-			@_head = node
-		else
-			# get the current head
-			current = @_head
-
-			# get the last node
-			while current.next
-				current = current.next
-
-			# make the next of last node point to the new one
-			current.next = node
-
-		# increase the length of linked list
-		@_length++
-
-	addAll : (array) ->
-		for each in array
-			@add (each)
-			
-	getFirst : () ->
-		# get last
-		@_head
-
-# IIMJOBs ka automation
-class IIMJobs
-
-	_.extend @::, new events.EventEmitter
-
-	# browser will the instance of zombie
-	browser : null
-
-	rank : 0
-
-	toVisit : {}
-
-	constructor : () ->
-		# initialize the browser
-		@browser = new Browser()
-		@rank = 0
-		@browser.site = "http://dev.hirevoice.com:3000"
-		# a function that can be overridden
-		@initialize arguments...
-
-	initialize : (options) ->
-		@on 'pageloaded', @pageloaded
-
-	visit : (url, callback) ->
-		@browser.visit(url, debug: false, callback)
-
-	pageloaded : (attr...) =>
-		console.log attr
+class IIMJobs extends Browzy
 
 	visit_login : (attr) =>
 		console.log "Visit login"
@@ -88,36 +19,33 @@ class IIMJobs
 	logout : (attr) =>
 		console.log "logout"
 
-
-	mechanics : (list) ->
-		@browser.visit list.data['url'], =>
-				name = list.data['name']
-				attr = list.data['attr']
-				@[name](attr)
-				# next				
-				list = list.next
-				if (list)
-					@mechanics(list)
-				else
-					console.log "life ends here"
-
+	endLife : () ->
+		process.exit(1)
 
 portal = new IIMJobs()
 # do login into the page
 
 # Attributes of the job
 attributes =
-	name : 'MTS - Head - Learning & Development'
-	description : """L&D Head (Manager) 
+	name : 'Paid Search Manager - Online Travel/eComm'
+	description : """MANAGER - PAID SEARCH - Gurgoan 
 
-- We are looking for L&D Head for MTS (Mumbai). Internal designation would be Leda and reporting to HR Head for Mumbai circle. 
+Hays, a global leader in specialist recruitment, is an expert in recruiting qualified & skilled professionals. We have a global presence in 31 countries with 247 offices. 
 
-Location: Andheri East. 
+Our client, an Online Travel Organisation is rapidly expanding its operations in India. We have partnered with them for their hiring plans to assist growth. 
 
-Open to all industry experts. Send your CV to Purnendu.shekhar@mtsindia.in """
+We are looking for a MANAGER - PAID SEARCH for Gurgaon. 
+
+- The main responsibilities will be to lead a team for development, execution and management of PPC marketing strategy. 
+
+- 6-8 years of experience in handling Pay Per Click Marketing strategies. Exposure to web analytics & overall online marketing is desirable. You need to have pursued qualifications / certifcations in design from Premiere School. 
+
+To apply, kindly share your Cv with us, by writing to shweta.raghuwanshi@hays.in and we will connect with you immediately. """
 
 
-steps = new LinkedList() 
+steps = new DS.LinkedList() 
+# console.log DS
+# console.log steps
 
 steps.add
 		url : "http://dev.hirevoice.com:3333"
@@ -135,8 +63,3 @@ steps.add
 		attr : null
 
 portal.mechanics steps.getFirst()
-# portal.start()
-# portal.mechanics(steps[0]["url"],  steps[0]["cb"])
-
-# after login do some form filling 	
-# portal.create_job(attributes)
