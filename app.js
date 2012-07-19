@@ -1,16 +1,20 @@
 // Print all of the news items on hackernews
+var request = require('request');
 var jsdom = require('jsdom');
 
-jsdom.env({
-  html: 'http://news.ycombinator.com/',
-  scripts: [
-    'http://code.jquery.com/jquery-1.5.min.js'
-  ],
-  done: function(errors, window) {
-    var $ = window.$;
-    console.log('HN Links');
-    $('td.title:not(:last) a').each(function() {
-      console.log(' -', $(this).text());
-    });
-  }
+//
+var AU = require('./AU');
+
+
+var url = "http://www.indiajs.com";
+// Create a object
+var x = new AU.Machine();
+x.url = url;
+
+// Make request
+result = x.getRequest();
+result.then(function(val){
+	console.log(val);
+}, function(error){
+	console.log(error);
 });
