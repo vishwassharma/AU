@@ -1,5 +1,6 @@
 var request = require('request');
 var jsdom = require('jsdom');
+
 var _ = require('underscore');
 var $ = require('jquery');
 
@@ -68,13 +69,18 @@ _.extend(Machine.prototype, Events, {
 	},
 });
 
-
+// This will be the parser api for doing a lot of things
 var Parser = AU.Parser = function(attributes, options) {
 	this.initialize.apply(attributes);
 }
 
 _.extend(Parser.prototype, Events, {
+	body : null,
+
 	initialize : function(){},
+	workOn : function(body) {
+		console.log(body);
+	},
 });
 
 exports.Parser = Parser;

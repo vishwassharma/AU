@@ -1,20 +1,18 @@
-// Print all of the news items on hackernews
-var request = require('request');
-var jsdom = require('jsdom');
-
-//
 var AU = require('./AU');
-
-
+// Url on which you will work
 var url = "http://www.indiajs.com";
-// Create a object
-var x = new AU.Machine();
-x.url = url;
+// Create a Machine Object
+var machine = new AU.Machine();
+machine.url = url;
 
 // Make request
-result = x.getRequest();
+result = machine.getRequest();
+
+parser = new AU.Parser();
+
 result.then(function(val){
-	console.log(val);
+	// parse out stuff from the result
+	parser.workOn(val);
 }, function(error){
 	console.log(error);
 });
