@@ -1,6 +1,6 @@
 var AU = require('./AU');
 // Url on which you will work
-var url = "http://news.ycombinator.com/";
+var url = "http://www.iimjobs.com/recruiter/login.php";
 // Create a Machine Object
 var machine = new AU.Machine();
 machine.url = url;

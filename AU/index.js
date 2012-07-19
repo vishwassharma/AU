@@ -40,10 +40,12 @@ _.extend(Machine.prototype, Events, {
 		return this._url;
 	},
 	// make a get request on url
-	getRequest : function(){
+	getRequest : function(url) {
+		url = url || this.url;
+
 		var dfd = $.Deferred();
 		// var result = null;
-		x = request(this.url, function(error, res, body){
+		x = request(url, function(error, res, body){
 			if (error) {
 				// error happened
 				dfd.reject(error);
@@ -56,8 +58,21 @@ _.extend(Machine.prototype, Events, {
 		return dfd.promise();
 	},
 	// make a post request on url
-	postRequest : function(){
+	postRequest : function(url) {
+		url = url || this.url;
+		var dfd = $.Deferred();
+		// var result = null;
+		x = request(url, function(error, res, body){
+			if (error) {
+				// error happened
+				dfd.reject(error);
 
+			} else if (res.statusCode == 200) {
+				dfd.resolve(body);
+			}
+		});
+		// console.log("exit");
+		return dfd.promise();
 	},
 	// Set cookie jar
 	setCookieJar : function(){
@@ -82,6 +97,7 @@ _.extend(Parser.prototype, Events, {
 	initialize : function(){},
 	workOn : function(body) {
 		// console.log(body);
+		// var dfd = $.Deferred();
 		jsdom.env({
 			html : body,
 			scripts : [
@@ -90,9 +106,11 @@ _.extend(Parser.prototype, Events, {
 			done : function(errors, window){
 				var $ = window.$;
 				console.log('HN Links');
-				$('td.title:not(:last) a').each(function() {
-					console.log(' -', $(this).text());
-				});
+				$("#email").val("vishwas@logicstick.com");
+				validateEmail('email');
+				$("#password").val("olive1986");
+				validateLoginPassword('password');
+				$("#recruiterReg input[type='submit']").click();
 			},
 		});
 	},
