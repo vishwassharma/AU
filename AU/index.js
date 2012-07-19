@@ -16,6 +16,8 @@ var Events = AU.Events = {
 
 var Machine = AU.Machine = function(attributes, options) {
 	this.initialize.apply(this, arguments);
+	var j = request.jar();
+	request = request.defaults({jar:j});
 };
 
 _.extend(Machine.prototype, Events, {
@@ -41,7 +43,7 @@ _.extend(Machine.prototype, Events, {
 	getRequest : function(){
 		var dfd = $.Deferred();
 		// var result = null;
-		request(this.url, function(error, res, body){
+		x = request(this.url, function(error, res, body){
 			if (error) {
 				// error happened
 				dfd.reject(error);
@@ -79,7 +81,20 @@ _.extend(Parser.prototype, Events, {
 
 	initialize : function(){},
 	workOn : function(body) {
-		console.log(body);
+		// console.log(body);
+		jsdom.env({
+			html : body,
+			scripts : [
+				'https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js',
+			],
+			done : function(errors, window){
+				var $ = window.$;
+				console.log('HN Links');
+				$('td.title:not(:last) a').each(function() {
+					console.log(' -', $(this).text());
+				});
+			},
+		});
 	},
 });
 
